@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Caja 2 💝</title>
   <style>
     body {
@@ -64,7 +64,7 @@
   <h1>Caja 2 💝</h1>
   <div id="arrow"></div>
   <canvas id="ruleta" width="300" height="300"></canvas>
-  <br>
+  <br />
   <button onclick="girar()">Girar 💫</button>
   <div id="resultado"></div>
 
@@ -88,6 +88,29 @@
     let anguloActual = 0;
     let girando = false;
 
+    function dibujarTextoEnLinea(ctx, texto, x, y, maxWidth, lineHeight) {
+      const palabras = texto.split(' ');
+      let linea = '';
+      let lineas = [];
+      
+      for (let n = 0; n < palabras.length; n++) {
+        const pruebaLinea = linea + palabras[n] + ' ';
+        const metrics = ctx.measureText(pruebaLinea);
+        const ancho = metrics.width;
+        if (ancho > maxWidth && n > 0) {
+          lineas.push(linea);
+          linea = palabras[n] + ' ';
+        } else {
+          linea = pruebaLinea;
+        }
+      }
+      lineas.push(linea);
+
+      for (let i = 0; i < lineas.length; i++) {
+        ctx.fillText(lineas[i], x, y + (i * lineHeight));
+      }
+    }
+
     function dibujarRuleta() {
       ctx.clearRect(0, 0, tamaño, tamaño);
 
@@ -106,11 +129,23 @@
         // Dibujar texto
         ctx.save();
         ctx.translate(radio, radio);
+        // Rotamos para que el texto quede casi horizontal y legible
         ctx.rotate(anguloInicio + anguloPorSector / 2);
-        ctx.textAlign = "right";
+
         ctx.fillStyle = "#b2005f";
-        ctx.font = "italic 13px 'Dancing Script', cursive";
-        ctx.fillText(opciones[i], radio - 15, 0);
+        ctx.font = "italic 12px 'Dancing Script', cursive";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+
+        // Posición del texto más cerca del centro (menos radio para que no sobresalga)
+        const textoX = radio - 30;
+        const textoY = 0;
+
+        const maxWidth = 80; // ancho máximo para envolver texto
+        const lineHeight = 14;
+
+        dibujarTextoEnLinea(ctx, opciones[i], textoX, textoY - (lineHeight * 0.5), maxWidth, lineHeight);
+
         ctx.restore();
       }
     }
@@ -143,7 +178,6 @@
     }
 
     function mostrarResultado() {
-      // Corregido: la flecha ahora apunta hacia ARRIBA
       const indice = Math.floor((opciones.length - ((anguloActual / (2 * Math.PI)) * opciones.length)) % opciones.length);
       const resultado = opciones[indice];
       document.getElementById("resultado").innerText = "Resultado: " + resultado;
