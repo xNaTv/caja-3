@@ -57,7 +57,12 @@
       text-align: right;
       padding-right: 10px;
       font-style: normal; /* NO en cursiva */
-      color: white;
+      color: black; /* Cambié a negro para que se vea */
+      font-weight: bold;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
     }
 
     .btn-girar {
@@ -142,7 +147,7 @@
       for (let i = 0; i < num; i++) {
         const seg = document.createElement("div");
         seg.className = "segment";
-        seg.style.transform = rotate(${(360 / num) * i}deg);
+        seg.style.transform = `rotate(${(360 / num) * i}deg)`;
         seg.style.backgroundColor = colores[i % colores.length];
         seg.innerText = opciones[i];
         ruleta.appendChild(seg);
@@ -158,13 +163,13 @@
       const anguloFinal = anguloBase + (360 - gradosPorOpcion * randomIndex - gradosPorOpcion / 2);
 
       ruleta.style.transition = "transform 4s ease-out";
-      ruleta.style.transform = rotate(${anguloFinal}deg);
+      ruleta.style.transform = `rotate(${anguloFinal}deg)`;
 
       btnGirar.style.display = "none";
       mensaje.style.display = "block";
 
       setTimeout(() => {
-        resultado.innerText = Te tocó: ${opciones[randomIndex]};
+        resultado.innerText = `Te tocó: ${opciones[randomIndex]}`;
       }, 4000);
     });
   </script>
