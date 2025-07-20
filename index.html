@@ -38,7 +38,7 @@
       z-index: 10;
     }
 
-    button {
+    #boton-girar {
       margin-top: 20px;
       font-size: 1.4em;
       padding: 10px 25px;
@@ -51,7 +51,7 @@
       cursor: pointer;
     }
 
-    #resultado, #mensaje-trampa {
+    #resultado {
       margin-top: 20px;
       font-size: 1.5em;
       color: #b2005f;
@@ -59,9 +59,10 @@
     }
 
     #mensaje-trampa {
-      margin-top: 5px;
-      font-size: 1.2em;
+      margin-top: 20px;
+      font-size: 1.4em;
       color: #a1004f;
+      font-style: italic;
     }
   </style>
 </head>
@@ -70,8 +71,11 @@
   <h1>Caja 3 💝</h1>
   <div id="arrow"></div>
   <canvas id="ruleta" width="300" height="300"></canvas>
-  <br />
-  <button onclick="girar()">Girar 💫</button>
+
+  <div id="boton-container">
+    <button id="boton-girar" onclick="girar()">Girar 💫</button>
+  </div>
+
   <div id="resultado"></div>
   <div id="mensaje-trampa"></div>
 
@@ -125,7 +129,6 @@
         const anguloInicio = anguloPorSector * i + anguloActual;
         const anguloFin = anguloInicio + anguloPorSector;
 
-        // Dibujar segmento
         ctx.beginPath();
         ctx.moveTo(radio, radio);
         ctx.arc(radio, radio, radio, anguloInicio, anguloFin);
@@ -133,7 +136,6 @@
         ctx.fill();
         ctx.stroke();
 
-        // Dibujar texto
         ctx.save();
         ctx.translate(radio, radio);
         ctx.rotate(anguloInicio + anguloPorSector / 2);
@@ -158,8 +160,13 @@
     function girar() {
       if (girando) return;
       girando = true;
-      document.getElementById("resultado").innerText = "";
-      document.getElementById("mensaje-trampa").innerText = "";
+
+      // Desaparece el botón
+      document.getElementById("boton-girar").style.display = "none";
+      // Muestra el mensaje
+      document.getElementById("mensaje-trampa").textContent = "No hagas trampa amor toco y toco";
+      // Limpia resultado mientras gira
+      document.getElementById("resultado").textContent = "";
 
       const vueltas = Math.random() * 3 + 4; // entre 4 y 7 vueltas
       const anguloFinal = vueltas * 2 * Math.PI;
@@ -188,7 +195,6 @@
       const indice = Math.floor((opciones.length - ((anguloActual / (2 * Math.PI)) * opciones.length)) % opciones.length);
       const resultado = opciones[indice];
       document.getElementById("resultado").innerText = "Resultado: " + resultado;
-      document.getElementById("mensaje-trampa").innerText = "No hagas trampa amor toco y toco";
     }
 
     dibujarRuleta();
