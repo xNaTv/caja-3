@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Caja 3</title>
+  <title><i>Caja 3</i></title>
   <style>
     body {
       margin: 0;
@@ -15,204 +15,98 @@
     .container {
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       height: 100vh;
-      padding-top: 80px;
+      flex-direction: column;
     }
 
-    .wheel-container {
-      text-align: center;
-      position: relative;
-    }
-
-    .wheel-outer {
-      position: relative;
-      width: 320px;
-      height: 320px;
-    }
-
-    .wheel-pointer {
-      position: absolute;
-      top: -24px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 17px solid transparent;
-      border-right: 17px solid transparent;
-      border-bottom: 24px solid red;
-      z-index: 2;
-    }
-
-    .wheel {
+    .ruleta {
       width: 300px;
       height: 300px;
       border-radius: 50%;
       border: 10px solid #ff69b4;
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      box-sizing: border-box;
+      position: relative;
       overflow: hidden;
-      transform: rotate(0deg);
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
     }
 
-    .segment {
+    .opcion {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      clip-path: polygon(50% 50%, 100% 0, 100% 100%);
-      transform-origin: 50% 50%;
-    }
-
-    .segment-text {
-      position: absolute;
-      width: 100px;
+      width: 50%;
+      height: 50%;
+      top: 50%;
       left: 50%;
-      top: 10px;
-      transform-origin: 0 100%;
+      transform-origin: 0% 0%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      font-size: 13px;
+      padding: 10px;
+      color: white;
       font-weight: bold;
-      color: #222;
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 6px;
-      padding: 4px;
-      pointer-events: none;
-      font-family: inherit;
     }
 
-    .btn-girar {
-      margin-top: 20px;
+    .opcion:nth-child(1) { transform: rotate(0deg) skewY(-60deg); background-color: #ff6384; }
+    .opcion:nth-child(2) { transform: rotate(72deg) skewY(-60deg); background-color: #ff9f40; }
+    .opcion:nth-child(3) { transform: rotate(144deg) skewY(-60deg); background-color: #ffcd56; }
+    .opcion:nth-child(4) { transform: rotate(216deg) skewY(-60deg); background-color: #4bc0c0; }
+    .opcion:nth-child(5) { transform: rotate(288deg) skewY(-60deg); background-color: #9966ff; }
+
+    .texto-opcion {
+      transform: skewY(60deg) rotate(-36deg);
+      width: 100px;
+    }
+
+    .puntero {
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #d63384;
+      position: absolute;
+      top: -30px;
+      left: calc(50% - 20px);
+      z-index: 10;
+    }
+
+    .boton-girar {
+      margin-top: 30px;
       padding: 10px 20px;
       font-size: 18px;
-      background-color: #ff69b4;
-      border: none;
+      background-color: #d63384;
       color: white;
-      border-radius: 5px;
+      border: none;
+      border-radius: 10px;
       cursor: pointer;
-      font-style: italic;
+      transition: background-color 0.3s;
     }
 
-    .resultado {
-      margin-top: 20px;
-      font-size: 20px;
-      font-style: italic;
-      color: #d63384;
-    }
-
-    .mensaje {
-      margin-top: 10px;
-      font-size: 16px;
-      font-style: italic;
-      color: #999;
-    }
-
-    .explicacion {
-      width: 300px;
-      margin-left: 50px;
-      font-size: 18px;
-      font-style: italic;
-      color: #d63384;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 3em;
-      margin-top: 20px;
-      color: #d63384;
-      font-style: italic;
+    .boton-girar:hover {
+      background-color: #b2226e;
     }
   </style>
 </head>
 <body>
-  <h1>Caja 3</h1>
   <div class="container">
-    <div class="wheel-container">
-      <div class="wheel-outer">
-        <div class="wheel-pointer"></div>
-        <div class="wheel" id="ruleta"></div>
-      </div>
-      <button class="btn-girar" id="btnGirar">Girar</button>
-      <div class="resultado" id="resultado"></div>
-      <div class="mensaje" id="mensaje" style="display:none;">no hagas trampa amor toco y toco</div>
+    <div class="ruleta" id="ruleta">
+      <div class="puntero"></div>
+      <div class="opcion"><div class="texto-opcion">foto carita</div></div>
+      <div class="opcion"><div class="texto-opcion">audio tierno</div></div>
+      <div class="opcion"><div class="texto-opcion">foto que solo yo puedo ver 😉</div></div>
+      <div class="opcion"><div class="texto-opcion">audio cantando una canción de amor</div></div>
+      <div class="opcion"><div class="texto-opcion">¿qué es lo que más te gusta de mí?</div></div>
     </div>
-    <div class="explicacion">
-      Para conseguir el código,<br>
-      debes girar la ruleta con estilo,<br>
-      y lo que te toque, mi cielo,<br>
-      deberás hacer sin desvío.<br><br>
-      Envíame lo que salió,<br>
-      no inventes, ni lo acomodes,<br>
-      que el código lo tengo yo,<br>
-      y solo a ti te corresponde.
-    </div>
+    <button class="boton-girar" onclick="girar()">Girar</button>
   </div>
 
   <script>
-    const opciones = [
-      "Foto carita",
-      "Audio tierno",
-      "Foto que solo yo puedo ver 😉",
-      "Audio cantando una canción de amor",
-      "¿Qué es lo que más te gusta de mí?"
-    ];
-    const colores = ["#ff4d6d", "#ff85a1", "#ffe6f1", "#fadadd", "#ffb3c6"];
-
-    const ruleta = document.getElementById("ruleta");
-    const btnGirar = document.getElementById("btnGirar");
-    const resultado = document.getElementById("resultado");
-    const mensaje = document.getElementById("mensaje");
-
-    function crearSegmentos() {
-      ruleta.innerHTML = "";
-      const num = opciones.length;
-      const gradosPorOpcion = 360 / num;
-
-      for (let i = 0; i < num; i++) {
-        const seg = document.createElement("div");
-        seg.className = "segment";
-        seg.style.backgroundColor = colores[i % colores.length];
-        seg.style.transform = `rotate(${i * gradosPorOpcion}deg)`;
-
-        const texto = document.createElement("div");
-        texto.className = "segment-text";
-        texto.innerText = opciones[i];
-        texto.style.transform = `rotate(${gradosPorOpcion / 2}deg)`;
-
-        seg.appendChild(texto);
-        ruleta.appendChild(seg);
-      }
+    function girar() {
+      const ruleta = document.getElementById('ruleta');
+      const grados = Math.floor(3600 + Math.random() * 360);
+      ruleta.style.transition = 'transform 4s ease-out';
+      ruleta.style.transform = 'rotate(' + grados + 'deg)';
     }
-
-    crearSegmentos();
-
-    let giroActual = 0;
-
-    btnGirar.addEventListener("click", () => {
-      resultado.innerText = "";
-      btnGirar.style.display = "none";
-      mensaje.style.display = "block";
-
-      const num = opciones.length;
-      const gradosPorOpcion = 360 / num;
-      const randomIndex = Math.floor(Math.random() * num);
-      const vueltas = 5 + Math.random();
-      const anguloFinal = 360 * vueltas - (randomIndex * gradosPorOpcion) - gradosPorOpcion / 2;
-
-      giroActual = anguloFinal;
-
-      ruleta.style.transition = "transform 4s cubic-bezier(.08,.93,.57,1)";
-      ruleta.style.transform = `rotate(${giroActual}deg)`;
-
-      setTimeout(() => {
-        resultado.innerText = `Te tocó: ${opciones[randomIndex]}`;
-        btnGirar.style.display = "block";
-        mensaje.style.display = "none";
-      }, 4000);
-    });
   </script>
 </body>
 </html>
+
