@@ -17,12 +17,11 @@
       justify-content: center;
       align-items: flex-start;
       height: 100vh;
-      padding-top: 120px; /* 🔽 Bajamos más todo */
+      padding-top: 80px; /* Baja todo */
     }
 
     .wheel-container {
       text-align: center;
-      margin-right: 20px;
     }
 
     .wheel {
@@ -62,7 +61,7 @@
     }
 
     .btn-girar {
-      margin-top: 30px; /* 🔽 Bajamos el botón */
+      margin-top: 20px;
       padding: 10px 20px;
       font-size: 18px;
       background-color: #ff69b4;
@@ -74,7 +73,7 @@
     }
 
     .resultado {
-      margin-top: 25px; /* 🔽 Bajamos el resultado */
+      margin-top: 20px;
       font-size: 20px;
       font-style: italic;
       color: #d63384;
@@ -89,7 +88,7 @@
 
     .explicacion {
       width: 300px;
-      margin-left: 30px; /* 🔁 Más a la izquierda */
+      margin-left: 50px;
       font-size: 18px;
       font-style: italic;
       color: #d63384;
@@ -143,7 +142,7 @@
       for (let i = 0; i < num; i++) {
         const seg = document.createElement("div");
         seg.className = "segment";
-        seg.style.transform = `rotate(${(360 / num) * i}deg)`;
+        seg.style.transform = rotate(${(360 / num) * i}deg);
         seg.style.backgroundColor = colores[i % colores.length];
         seg.innerText = opciones[i];
         ruleta.appendChild(seg);
@@ -155,17 +154,17 @@
     btnGirar.addEventListener("click", () => {
       const randomIndex = Math.floor(Math.random() * opciones.length);
       const gradosPorOpcion = 360 / opciones.length;
-      const anguloBase = 360 * 5;
+      const anguloBase = 360 * 5; // 5 vueltas completas
       const anguloFinal = anguloBase + (360 - gradosPorOpcion * randomIndex - gradosPorOpcion / 2);
 
       ruleta.style.transition = "transform 4s ease-out";
-      ruleta.style.transform = `rotate(${anguloFinal}deg)`;
+      ruleta.style.transform = rotate(${anguloFinal}deg);
 
       btnGirar.style.display = "none";
       mensaje.style.display = "block";
 
       setTimeout(() => {
-        resultado.innerText = `Te tocó: ${opciones[randomIndex]}`;
+        resultado.innerText = Te tocó: ${opciones[randomIndex]};
       }, 4000);
     });
   </script>
