@@ -15,13 +15,14 @@
       height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start; /* para poder bajar con margin */
       position: relative;
       text-align: center;
+      padding-top: 130px; /* espacio para título */
     }
 
     h1 {
-      position: absolute;
+      position: fixed;
       top: 20px;
       left: 50%;
       transform: translateX(-50%);
@@ -39,6 +40,7 @@
       gap: 40px;
       position: relative;
       z-index: 5;
+      margin-top: 40px; /* Baja todo el bloque central */
     }
 
     #ruleta-container {
@@ -90,7 +92,7 @@
       font-style: italic;
       position: relative;
       z-index: 2;
-      min-height: 1.6em; /* para que no salte el layout */
+      min-height: 1.6em;
     }
 
     #mensaje-trampa {
@@ -112,7 +114,7 @@
       text-align: left;
       font-style: italic;
       position: fixed;
-      right: 65px; /* movido un poco más a la izquierda */
+      right: 65px;
       top: 50%;
       transform: translateY(-50%);
       user-select: none;
@@ -177,6 +179,7 @@
       #center-container {
         flex-direction: column;
         gap: 15px;
+        margin-top: 20px;
       }
     }
   </style>
@@ -292,12 +295,8 @@
       document.getElementById("mensaje-trampa").textContent = "No hagas trampa amor toco y toco";
       document.getElementById("resultado").textContent = "";
 
-      // Calculamos ángulo final aleatorio (4-7 vueltas) + posición al centro del sector ganador
-      const vueltas = Math.random() * 3 + 4; // entre 4 y 7 vueltas
+      const vueltas = Math.random() * 3 + 4;
       const indiceGanador = Math.floor(Math.random() * opciones.length);
-      // Para que el índice coincida con la opción que apunta hacia arriba, debemos ajustar el ángulo final
-      // La flecha apunta hacia arriba (ángulo 3PI/2 en canvas), así que restamos para alinear
-      // El ángulo para que la opción ganadora quede bajo la flecha es:
       const anguloParaOpcion = (3 * Math.PI / 2) - (indiceGanador * anguloPorSector) - (anguloPorSector / 2);
       const anguloFinal = vueltas * 2 * Math.PI + anguloParaOpcion;
 
@@ -329,7 +328,6 @@
 
     dibujarRuleta();
 
-    // Crear corazones cayendo
     function crearCorazones() {
       for (let i = 0; i < 40; i++) {
         let heart = document.createElement("div");
