@@ -10,7 +10,7 @@
       padding: 0;
       background: #ffeef2; /* Rosa pastel */
       font-family: 'Dancing Script', cursive;
-      font-style: italic;
+      font-style: italic;  /* cursiva general */
       text-align: center;
       overflow: hidden;
       height: 100vh;
@@ -24,6 +24,17 @@
       margin-top: 20px;
       color: #d63384;
       font-style: italic;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Poema explicativo */
+    #poema {
+      max-width: 400px;
+      margin: 15px auto 30px;
+      font-size: 1.3em;
+      color: #9b2d58;
+      line-height: 1.4;
       position: relative;
       z-index: 2;
     }
@@ -138,6 +149,18 @@
 <body>
 
   <h1>Caja 3 💝</h1>
+
+  <div id="poema">
+    Gira la ruleta con un dulce suspiro,<br />
+    cada vuelta es un juego, un secreto en giro.<br />
+    Para conseguir el código que guardo aquí,<br />
+    debes contarme el reto que te toque a ti.<br /><br />
+    Yo tengo la llave, pero primero quiero,<br />
+    ver tu valentía y el amor sincero.<br />
+    No es solo un juego, es un lazo, un cantar,<br />
+    que nace en tu giro y nos hace soñar.
+  </div>
+
   <div id="arrow"></div>
   <canvas id="ruleta" width="300" height="300"></canvas>
 
@@ -187,6 +210,9 @@
       lineas.push(linea);
 
       for (let i = 0; i < lineas.length; i++) {
+        // Texto NO cursiva aquí:
+        ctx.font = "12px Arial, sans-serif";
+        ctx.fillStyle = "#b2005f";
         ctx.fillText(lineas[i], x, y + (i * lineHeight));
       }
     }
@@ -208,11 +234,6 @@
         ctx.save();
         ctx.translate(radio, radio);
         ctx.rotate(anguloInicio + anguloPorSector / 2);
-
-        ctx.fillStyle = "#b2005f";
-        ctx.font = "italic 12px 'Dancing Script', cursive";
-        ctx.textAlign = "right";
-        ctx.textBaseline = "middle";
 
         const textoX = radio - 30;
         const textoY = 0;
@@ -281,7 +302,6 @@
     }
 
     crearCorazones();
-
   </script>
 
 </body>
