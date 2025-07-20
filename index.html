@@ -43,11 +43,13 @@
 
     #ruleta-container {
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     canvas {
       display: block;
-      margin: 0 auto;
       max-width: 300px;
       max-height: 300px;
     }
@@ -58,7 +60,7 @@
       border-left: 15px solid transparent;
       border-right: 15px solid transparent;
       border-top: 25px solid #d63384;
-      margin: 0 auto 10px auto;
+      margin: 0 0 10px 0;
       position: relative;
       top: 10px;
       z-index: 3;
@@ -78,6 +80,7 @@
       position: relative;
       z-index: 2;
       display: block;
+      width: max-content;
     }
 
     #resultado {
@@ -99,7 +102,7 @@
       z-index: 2;
     }
 
-    /* Poema explicativo a la derecha, pegado al borde derecho */
+    /* Poema explicativo a la derecha, pegado al borde derecho pero un poco más a la izquierda */
     #poema {
       max-width: 350px;
       color: #9b2d58;
@@ -108,7 +111,7 @@
       text-align: left;
       font-style: italic;
       position: fixed;
-      right: 20px;
+      right: 50px; /* más a la izquierda que antes */
       top: 50%;
       transform: translateY(-50%);
       user-select: none;
@@ -246,6 +249,7 @@
         // Texto NO cursiva aquí:
         ctx.font = "12px Arial, sans-serif";
         ctx.fillStyle = "#b2005f";
+        ctx.textAlign = "center";
         ctx.fillText(lineas[i], x, y + (i * lineHeight));
       }
     }
@@ -268,7 +272,7 @@
         ctx.translate(radio, radio);
         ctx.rotate(anguloInicio + anguloPorSector / 2);
 
-        const textoX = radio - 30;
+        const textoX = radio / 2;
         const textoY = 0;
 
         const maxWidth = 80;
