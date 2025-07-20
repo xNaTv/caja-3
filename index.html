@@ -4,52 +4,60 @@
   <meta charset="UTF-8" />
   <title>Caja 3 💝</title>
   <style>
-    /* Fondo y fuente */
     body {
       margin: 0;
       padding: 0;
-      background: #ffeef2; /* Rosa pastel */
+      background: #ffeef2;
       font-family: 'Dancing Script', cursive;
-      font-style: italic;  /* cursiva general */
-      text-align: center;
+      font-style: italic;
+      color: #b2005f;
       overflow: hidden;
       height: 100vh;
-      position: relative;
-      color: #b2005f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    /* Título */
     h1 {
       font-size: 3em;
       margin-top: 20px;
       color: #d63384;
       font-style: italic;
-      position: relative;
       z-index: 2;
     }
 
-    /* Poema explicativo */
+    /* Contenedor principal: ruleta y texto lado a lado */
+    #main-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      width: 90%;
+      max-width: 900px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      z-index: 2;
+    }
+
+    /* Poema a la derecha */
     #poema {
-      max-width: 400px;
-      margin: 15px auto 30px;
+      max-width: 350px;
       font-size: 1.3em;
       color: #9b2d58;
       line-height: 1.4;
-      position: relative;
-      z-index: 2;
+      text-align: left;
+      min-width: 300px;
     }
 
-    /* Canvas ruleta */
     canvas {
       margin-top: 10px;
       display: block;
-      margin-left: auto;
-      margin-right: auto;
       position: relative;
       z-index: 2;
+      max-width: 300px;
+      max-height: 300px;
     }
 
-    /* Flecha */
     #arrow {
       width: 0;
       height: 0;
@@ -62,7 +70,6 @@
       z-index: 3;
     }
 
-    /* Botón girar */
     #boton-girar {
       margin-top: 20px;
       font-size: 1.4em;
@@ -76,9 +83,9 @@
       cursor: pointer;
       position: relative;
       z-index: 2;
+      display: block;
     }
 
-    /* Resultado y mensaje */
     #resultado {
       margin-top: 20px;
       font-size: 1.5em;
@@ -142,6 +149,20 @@
         opacity: 0;
       }
     }
+
+    /* Responsive para pantallas chicas */
+    @media (max-width: 700px) {
+      #main-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      #poema {
+        max-width: 90vw;
+        min-width: auto;
+        text-align: center;
+        margin-top: 20px;
+      }
+    }
   </style>
   <!-- Fuente cursiva -->
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
@@ -150,26 +171,28 @@
 
   <h1>Caja 3 💝</h1>
 
-  <div id="poema">
-    Gira la ruleta con un dulce suspiro,<br />
-    cada vuelta es un juego, un secreto en giro.<br />
-    Para conseguir el código que guardo aquí,<br />
-    debes contarme el reto que te toque a ti.<br /><br />
-    Yo tengo la llave, pero primero quiero,<br />
-    ver tu valentía y el amor sincero.<br />
-    No es solo un juego, es un lazo, un cantar,<br />
-    que nace en tu giro y nos hace soñar.
+  <div id="main-container">
+    <div>
+      <div id="arrow"></div>
+      <canvas id="ruleta" width="300" height="300"></canvas>
+      <div id="boton-container">
+        <button id="boton-girar" onclick="girar()">Girar 💫</button>
+      </div>
+      <div id="resultado"></div>
+      <div id="mensaje-trampa"></div>
+    </div>
+
+    <div id="poema">
+      Gira la ruleta con un dulce suspiro,<br />
+      cada vuelta es un juego, un secreto en giro.<br />
+      Para conseguir el código que guardo aquí,<br />
+      debes contarme el reto que te toque a ti.<br /><br />
+      Yo tengo la llave, pero primero quiero,<br />
+      ver tu valentía y el amor sincero.<br />
+      No es solo un juego, es un lazo, un cantar,<br />
+      que nace en tu giro y nos hace soñar.
+    </div>
   </div>
-
-  <div id="arrow"></div>
-  <canvas id="ruleta" width="300" height="300"></canvas>
-
-  <div id="boton-container">
-    <button id="boton-girar" onclick="girar()">Girar 💫</button>
-  </div>
-
-  <div id="resultado"></div>
-  <div id="mensaje-trampa"></div>
 
   <script>
     const opciones = [
