@@ -154,10 +154,13 @@
 
   <script>
     const opciones = [
-      "Decime un piropo", "Contame un secreto", "Mandame un audio cantando",
-      "Mandame un meme", "Confesá algo que no me dijiste", "Decime por qué me querés"
+      "Foto carita",
+      "Audio tierno",
+      "Foto que solo yo puedo ver 😉",
+      "Audio cantando una canción de amor",
+      "¿Qué es lo que más te gusta de mí?"
     ];
-    const colores = ["#ff4d6d", "#ff85a1", "#ffe6f1", "#fadadd", "#ffb3c6", "#ffb6b9"];
+    const colores = ["#ff4d6d", "#ff85a1", "#ffe6f1", "#fadadd", "#ffb3c6"];
 
     const ruleta = document.getElementById("ruleta");
     const btnGirar = document.getElementById("btnGirar");
@@ -197,7 +200,7 @@
       const num = opciones.length;
       const gradosPorOpcion = 360 / num;
       const randomIndex = Math.floor(Math.random() * num);
-      const vueltas = 5 + Math.random(); 
+      const vueltas = 5 + Math.random();
       const anguloFinal = 360 * vueltas - (randomIndex * gradosPorOpcion) - gradosPorOpcion/2;
 
       giroActual = anguloFinal;
