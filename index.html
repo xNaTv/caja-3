@@ -16,7 +16,7 @@
       font-size: 3em;
       margin-top: 20px;
       color: #d63384;
-      font-style: italic; /* cursiva */
+      font-style: italic;
     }
 
     canvas {
@@ -62,7 +62,7 @@
       margin-top: 20px;
       font-size: 1.4em;
       color: #a1004f;
-      font-style: italic; /* cursiva para el mensaje */
+      font-style: italic;
       font-weight: 500;
     }
   </style>
@@ -104,7 +104,7 @@
       const palabras = texto.split(' ');
       let linea = '';
       let lineas = [];
-      
+
       for (let n = 0; n < palabras.length; n++) {
         const pruebaLinea = linea + palabras[n] + ' ';
         const metrics = ctx.measureText(pruebaLinea);
@@ -162,29 +162,30 @@
       if (girando) return;
       girando = true;
 
-      // Desaparece el botón
       document.getElementById("boton-girar").style.display = "none";
-      // Muestra el mensaje
       document.getElementById("mensaje-trampa").textContent = "No hagas trampa amor toco y toco";
-      // Limpia resultado mientras gira
       document.getElementById("resultado").textContent = "";
 
-      const vueltas = Math.random() * 3 + 4; // entre 4 y 7 vueltas
-      const anguloFinal = vueltas * 2 * Math.PI;
+      const indiceGanador = Math.floor(Math.random() * opciones.length);
+      const anguloParaOpcion = indiceGanador * anguloPorSector;
+
+      const vueltas = Math.random() * 3 + 4; // 4 a 7 vueltas
+      const anguloFinal = vueltas * 2 * Math.PI + anguloParaOpcion;
+
       const duracion = 4000;
       const inicio = performance.now();
 
       function animar(tiempo) {
         const progreso = (tiempo - inicio) / duracion;
         if (progreso < 1) {
-          const ease = 1 - Math.pow(1 - progreso, 3); // easeOutCubic
+          const ease = 1 - Math.pow(1 - progreso, 3);
           anguloActual = anguloFinal * ease;
           dibujarRuleta();
           requestAnimationFrame(animar);
         } else {
           anguloActual %= 2 * Math.PI;
           dibujarRuleta();
-          mostrarResultado();
+          mostrarResultado(indiceGanador);
           girando = false;
         }
       }
@@ -192,8 +193,7 @@
       requestAnimationFrame(animar);
     }
 
-    function mostrarResultado() {
-      const indice = Math.floor((opciones.length - ((anguloActual / (2 * Math.PI)) * opciones.length)) % opciones.length);
+    function mostrarResultado(indice) {
       const resultado = opciones[indice];
       document.getElementById("resultado").innerText = "Resultado: " + resultado;
     }
