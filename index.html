@@ -17,11 +17,12 @@
       justify-content: center;
       align-items: flex-start;
       height: 100vh;
-      padding-top: 80px; /* Baja todo */
+      padding-top: 80px;
     }
 
     .wheel-container {
       text-align: center;
+      position: relative;
     }
 
     .wheel {
@@ -31,6 +32,7 @@
       border: 10px solid #ff69b4;
       position: relative;
       margin: 0 auto;
+      overflow: visible;
     }
 
     .wheel:before {
@@ -51,18 +53,19 @@
       position: absolute;
       width: 50%;
       height: 50%;
-      left: 50%;
       top: 50%;
+      left: 50%;
       transform-origin: 0% 0%;
-      text-align: right;
-      padding-right: 10px;
-      font-style: normal; /* NO en cursiva */
-      color: black; /* Cambié a negro para que se vea */
-      font-weight: bold;
-      font-size: 14px;
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+      background-color: transparent;
       display: flex;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: flex-start;
+      padding-left: 10px;
+      color: black;
+      font-weight: bold;
+      font-size: 14px;
+      overflow: visible;
     }
 
     .btn-girar {
@@ -144,12 +147,26 @@
 
     function crearSegmentos() {
       const num = opciones.length;
+      const gradosPorOpcion = 360 / num;
+
       for (let i = 0; i < num; i++) {
         const seg = document.createElement("div");
         seg.className = "segment";
-        seg.style.transform = `rotate(${(360 / num) * i}deg)`;
+        seg.style.transform = `rotate(${gradosPorOpcion * i}deg)`;
         seg.style.backgroundColor = colores[i % colores.length];
-        seg.innerText = opciones[i];
+
+        // Texto rotado para que quede legible
+        const texto = document.createElement("span");
+        texto.innerText = opciones[i];
+        texto.style.position = "absolute";
+        texto.style.top = "50%";
+        texto.style.left = "0";
+        texto.style.width = "100px";
+        texto.style.whiteSpace = "nowrap";
+        texto.style.transform = `rotate(${gradosPorOpcion / 2}deg) translate(60px) rotate(-${gradosPorOpcion / 2}deg)`;
+        texto.style.pointerEvents = "none";
+
+        seg.appendChild(texto);
         ruleta.appendChild(seg);
       }
     }
