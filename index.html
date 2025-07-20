@@ -14,8 +14,8 @@
       overflow: hidden;
       height: 100vh;
       display: flex;
-      justify-content: center; /* centra horizontal */
-      align-items: center;     /* centra vertical */
+      justify-content: center;
+      align-items: center;
       position: relative;
       text-align: center;
     }
@@ -90,6 +90,7 @@
       font-style: italic;
       position: relative;
       z-index: 2;
+      min-height: 1.6em; /* para que no salte el layout */
     }
 
     #mensaje-trampa {
@@ -111,7 +112,7 @@
       text-align: left;
       font-style: italic;
       position: fixed;
-      right: 50px; /* más a la izquierda que antes */
+      right: 65px; /* movido un poco más a la izquierda */
       top: 50%;
       transform: translateY(-50%);
       user-select: none;
@@ -246,8 +247,7 @@
       lineas.push(linea);
 
       for (let i = 0; i < lineas.length; i++) {
-        // Texto NO cursiva aquí:
-        ctx.font = "12px Arial, sans-serif";
+        ctx.font = "12px Arial, sans-serif"; // NO cursiva en texto ruleta
         ctx.fillStyle = "#b2005f";
         ctx.textAlign = "center";
         ctx.fillText(lineas[i], x, y + (i * lineHeight));
@@ -292,10 +292,13 @@
       document.getElementById("mensaje-trampa").textContent = "No hagas trampa amor toco y toco";
       document.getElementById("resultado").textContent = "";
 
+      // Calculamos ángulo final aleatorio (4-7 vueltas) + posición al centro del sector ganador
+      const vueltas = Math.random() * 3 + 4; // entre 4 y 7 vueltas
       const indiceGanador = Math.floor(Math.random() * opciones.length);
-      const anguloParaOpcion = indiceGanador * anguloPorSector;
-
-      const vueltas = Math.random() * 3 + 4; // 4 a 7 vueltas
+      // Para que el índice coincida con la opción que apunta hacia arriba, debemos ajustar el ángulo final
+      // La flecha apunta hacia arriba (ángulo 3PI/2 en canvas), así que restamos para alinear
+      // El ángulo para que la opción ganadora quede bajo la flecha es:
+      const anguloParaOpcion = (3 * Math.PI / 2) - (indiceGanador * anguloPorSector) - (anguloPorSector / 2);
       const anguloFinal = vueltas * 2 * Math.PI + anguloParaOpcion;
 
       const duracion = 4000;
