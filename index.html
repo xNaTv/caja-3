@@ -2,171 +2,343 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title><i>Caja 3</i></title>
+  <title>Caja 3 💝</title>
   <style>
     body {
       margin: 0;
       padding: 0;
+      background: #ffeef2;
       font-family: 'Dancing Script', cursive;
-      background-color: #ffeef2;
+      font-style: italic;
+      color: #b2005f;
       overflow: hidden;
-    }
-
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
       height: 100vh;
-      padding-top: 80px; /* Baja todo */
-    }
-
-    .wheel-container {
       text-align: center;
     }
 
-    .wheel {
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      border: 10px solid #ff69b4;
-      position: relative;
-      margin: 0 auto;
-    }
-
-    .wheel:before {
-      content: "";
-      position: absolute;
-      top: -20px;
+    h1 {
+      position: fixed;
+      top: 20px;
       left: 50%;
       transform: translateX(-50%);
+      font-size: 3em;
+      color: #d63384;
+      font-style: italic;
+      z-index: 10;
+      margin: 0;
+    }
+
+    #center-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      z-index: 5;
+    }
+
+    #ruleta-container {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    canvas {
+      display: block;
+      max-width: 300px;
+      max-height: 300px;
+    }
+
+    #arrow {
       width: 0;
       height: 0;
       border-left: 15px solid transparent;
       border-right: 15px solid transparent;
-      border-bottom: 20px solid red;
+      border-top: 25px solid #d63384;
+      margin: 0 0 10px 0;
+      position: relative;
+      top: 10px;
+      z-index: 3;
+    }
+
+    #boton-girar {
+      margin-top: 20px;
+      font-size: 1.4em;
+      padding: 10px 25px;
+      background-color: #d63384;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Dancing Script', cursive;
+      font-style: italic;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      display: block;
+      width: max-content;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #b2005f;
+      font-style: italic;
+      position: relative;
+      z-index: 2;
+      min-height: 1.6em;
+    }
+
+    #mensaje-trampa {
+      margin-top: 20px;
+      font-size: 1.4em;
+      color: #a1004f;
+      font-style: italic;
+      font-weight: 500;
+      position: relative;
       z-index: 2;
     }
 
-    .segment {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      left: 50%;
+    #poema {
+      max-width: 350px;
+      color: #9b2d58;
+      font-size: 1.3em;
+      line-height: 1.4;
+      text-align: left;
+      font-style: italic;
+      position: fixed;
+      right: 65px;
       top: 50%;
-      transform-origin: 0% 0%;
-      text-align: right;
-      padding-right: 10px;
-      font-style: normal; /* NO en cursiva */
-      color: white;
+      transform: translateY(-50%);
+      user-select: none;
+      z-index: 10;
     }
 
-    .btn-girar {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 18px;
-      background-color: #ff69b4;
-      border: none;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      font-style: italic;
+    .heart {
+      position: fixed;
+      width: 15px;
+      height: 15px;
+      background: #ff4d6d;
+      transform: rotate(45deg);
+      animation: fall linear infinite;
+      z-index: 1;
+      top: -10%;
+      opacity: 1;
+      border-radius: 2px;
     }
 
-    .resultado {
-      margin-top: 20px;
-      font-size: 20px;
-      font-style: italic;
-      color: #d63384;
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: #ff4d6d;
+      border-radius: 50%;
     }
 
-    .mensaje {
-      margin-top: 10px;
-      font-size: 16px;
-      font-style: italic;
-      color: #999;
+    .heart::before {
+      top: -7.5px;
+      left: 0;
     }
 
-    .explicacion {
-      width: 300px;
-      margin-left: 50px;
-      font-size: 18px;
-      font-style: italic;
-      color: #d63384;
+    .heart::after {
+      left: -7.5px;
+      top: 0;
     }
 
-    h1 {
-      text-align: center;
-      font-size: 3em;
-      margin-top: 20px;
-      color: #d63384;
-      font-style: italic;
+    @keyframes fall {
+      0% {
+        top: -10%;
+        opacity: 1;
+      }
+      100% {
+        top: 110%;
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 800px) {
+      #poema {
+        position: static;
+        transform: none;
+        max-width: 90vw;
+        margin: 20px auto 0 auto;
+        text-align: center;
+        user-select: auto;
+      }
+      #center-container {
+        position: static;
+        transform: none;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 20px;
+      }
     }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <h1>Caja 3</h1>
-  <div class="container">
-    <div class="wheel-container">
-      <div class="wheel" id="ruleta"></div>
-      <button class="btn-girar" id="btnGirar">Girar</button>
-      <div class="resultado" id="resultado"></div>
-      <div class="mensaje" id="mensaje" style="display:none;">no hagas trampa amor toco y toco</div>
+
+  <h1>Caja 3 💝</h1>
+
+  <div id="center-container">
+    <div id="ruleta-container">
+      <div id="arrow"></div>
+      <canvas id="ruleta" width="300" height="300"></canvas>
+      <button id="boton-girar" onclick="girar()">Girar 💫</button>
+      <div id="resultado"></div>
+      <div id="mensaje-trampa"></div>
     </div>
-    <div class="explicacion">
-      Para conseguir el código,<br>
-      debes girar la ruleta con estilo,<br>
-      y lo que te toque, mi cielo,<br>
-      deberás hacer sin desvío.<br><br>
-      Envíame lo que salió,<br>
-      no inventes, ni lo acomodes,<br>
-      que el código lo tengo yo,<br>
-      y solo a ti te corresponde.
-    </div>
+  </div>
+
+  <div id="poema">
+    Gira la ruleta con un dulce suspiro,<br />
+    cada vuelta es un juego, un secreto en giro.<br />
+    Para conseguir el código que guardo aquí,<br />
+    debes contarme el reto que te toque a ti.<br /><br />
+    Yo tengo la llave, pero primero quiero,<br />
+    ver tu valentía y el amor sincero.<br />
+    No es solo un juego, es un lazo, un cantar,<br />
+    que nace en tu giro y nos hace soñar.
   </div>
 
   <script>
     const opciones = [
-      "Decime un piropo", "Contame un secreto", "Mandame un audio cantando",
-      "Mandame un meme", "Confesá algo que no me dijiste", "Decime por qué me querés"
+      "foto carita",
+      "audio tierno con voz tierna",
+      "audio cantándome una canción",
+      "foto que solo yo pueda ver 😉",
+      "¿qué es lo que más te gusta de mí?",
+      "foto carita"
     ];
 
-    const ruleta = document.getElementById("ruleta");
-    const btnGirar = document.getElementById("btnGirar");
-    const resultado = document.getElementById("resultado");
-    const mensaje = document.getElementById("mensaje");
+    const colores = ["#f8cdd5", "#f4a6b7"];
+    const canvas = document.getElementById("ruleta");
+    const ctx = canvas.getContext("2d");
+    const tamaño = canvas.width;
+    const radio = tamaño / 2;
+    const anguloPorSector = (2 * Math.PI) / opciones.length;
 
-    const colores = ["#ff4d6d", "#ff85a1"];
+    let anguloActual = 0;
+    let girando = false;
 
-    function crearSegmentos() {
-      const num = opciones.length;
-      for (let i = 0; i < num; i++) {
-        const seg = document.createElement("div");
-        seg.className = "segment";
-        seg.style.transform = `rotate(${(360 / num) * i}deg)`;
-        seg.style.backgroundColor = colores[i % colores.length];
-        seg.innerText = opciones[i];
-        ruleta.appendChild(seg);
+    function dibujarTextoEnLinea(ctx, texto, x, y, maxWidth, lineHeight) {
+      const palabras = texto.split(' ');
+      let linea = '';
+      let lineas = [];
+
+      for (let n = 0; n < palabras.length; n++) {
+        const pruebaLinea = linea + palabras[n] + ' ';
+        const metrics = ctx.measureText(pruebaLinea);
+        const ancho = metrics.width;
+        if (ancho > maxWidth && n > 0) {
+          lineas.push(linea);
+          linea = palabras[n] + ' ';
+        } else {
+          linea = pruebaLinea;
+        }
+      }
+      lineas.push(linea);
+
+      for (let i = 0; i < lineas.length; i++) {
+        ctx.font = "12px Arial, sans-serif"; // NO cursiva en texto ruleta
+        ctx.fillStyle = "#b2005f";
+        ctx.textAlign = "center";
+        ctx.fillText(lineas[i], x, y + (i * lineHeight));
       }
     }
 
-    crearSegmentos();
+    function dibujarRuleta() {
+      ctx.clearRect(0, 0, tamaño, tamaño);
 
-    btnGirar.addEventListener("click", () => {
-      const randomIndex = Math.floor(Math.random() * opciones.length);
-      const gradosPorOpcion = 360 / opciones.length;
-      const anguloBase = 360 * 5; // 5 vueltas completas
-      const anguloFinal = anguloBase + (360 - gradosPorOpcion * randomIndex - gradosPorOpcion / 2);
+      for (let i = 0; i < opciones.length; i++) {
+        const anguloInicio = anguloPorSector * i + anguloActual;
+        const anguloFin = anguloInicio + anguloPorSector;
 
-      ruleta.style.transition = "transform 4s ease-out";
-      ruleta.style.transform = `rotate(${anguloFinal}deg)`;
+        ctx.beginPath();
+        ctx.moveTo(radio, radio);
+        ctx.arc(radio, radio, radio, anguloInicio, anguloFin);
+        ctx.fillStyle = colores[i % colores.length];
+        ctx.fill();
+        ctx.stroke();
 
-      btnGirar.style.display = "none";
-      mensaje.style.display = "block";
+        ctx.save();
+        ctx.translate(radio, radio);
+        ctx.rotate(anguloInicio + anguloPorSector / 2);
 
-      setTimeout(() => {
-        resultado.innerText = `Te tocó: ${opciones[randomIndex]}`;
-      }, 4000);
-    });
+        const textoX = radio / 2;
+        const textoY = 0;
+
+        const maxWidth = 80;
+        const lineHeight = 14;
+
+        dibujarTextoEnLinea(ctx, opciones[i], textoX, textoY - (lineHeight * 0.5), maxWidth, lineHeight);
+
+        ctx.restore();
+      }
+    }
+
+    function girar() {
+      if (girando) return;
+      girando = true;
+
+      document.getElementById("boton-girar").style.display = "none";
+      document.getElementById("mensaje-trampa").textContent = "No hagas trampa amor toco y toco";
+      document.getElementById("resultado").textContent = "";
+
+      const vueltas = Math.random() * 3 + 4;
+      const anguloFinal = vueltas * 2 * Math.PI + Math.random() * 2 * Math.PI;
+
+      const duracion = 4000;
+      const inicio = performance.now();
+
+      function animar(tiempo) {
+        const progreso = (tiempo - inicio) / duracion;
+        if (progreso < 1) {
+          const ease = 1 - Math.pow(1 - progreso, 3);
+          anguloActual = anguloFinal * ease;
+          dibujarRuleta();
+          requestAnimationFrame(animar);
+        } else {
+          anguloActual %= 2 * Math.PI;
+          dibujarRuleta();
+
+          // Cálculo índice ganador con ajuste para flecha arriba (3PI/2)
+          let anguloRotado = (3 * Math.PI / 2 - anguloActual + 2 * Math.PI) % (2 * Math.PI);
+          const indiceGanador = Math.floor(anguloRotado / anguloPorSector) % opciones.length;
+
+          mostrarResultado(indiceGanador);
+          girando = false;
+        }
+      }
+
+      requestAnimationFrame(animar);
+    }
+
+    function mostrarResultado(indice) {
+      const resultado = opciones[indice];
+      document.getElementById("resultado").innerText = "Resultado: " + resultado;
+    }
+
+    dibujarRuleta();
+
+    function crearCorazones() {
+      for (let i = 0; i < 40; i++) {
+        let heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = 5 + Math.random() * 5 + "s";
+        heart.style.animationDelay = Math.random() * 5 + "s";
+        document.body.appendChild(heart);
+      }
+    }
+
+    crearCorazones();
   </script>
+
 </body>
 </html>
