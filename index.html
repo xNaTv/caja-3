@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Caja 2 💝</title>
+  <title>Caja 3 💝</title>
   <style>
     body {
       background-color: #ffeef2;
@@ -51,22 +51,29 @@
       cursor: pointer;
     }
 
-    #resultado {
+    #resultado, #mensaje-trampa {
       margin-top: 20px;
       font-size: 1.5em;
       color: #b2005f;
       font-style: italic;
     }
+
+    #mensaje-trampa {
+      margin-top: 5px;
+      font-size: 1.2em;
+      color: #a1004f;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Caja 2 💝</h1>
+  <h1>Caja 3 💝</h1>
   <div id="arrow"></div>
   <canvas id="ruleta" width="300" height="300"></canvas>
   <br />
   <button onclick="girar()">Girar 💫</button>
   <div id="resultado"></div>
+  <div id="mensaje-trampa"></div>
 
   <script>
     const opciones = [
@@ -129,7 +136,6 @@
         // Dibujar texto
         ctx.save();
         ctx.translate(radio, radio);
-        // Rotamos para que el texto quede casi horizontal y legible
         ctx.rotate(anguloInicio + anguloPorSector / 2);
 
         ctx.fillStyle = "#b2005f";
@@ -137,11 +143,10 @@
         ctx.textAlign = "right";
         ctx.textBaseline = "middle";
 
-        // Posición del texto más cerca del centro (menos radio para que no sobresalga)
         const textoX = radio - 30;
         const textoY = 0;
 
-        const maxWidth = 80; // ancho máximo para envolver texto
+        const maxWidth = 80;
         const lineHeight = 14;
 
         dibujarTextoEnLinea(ctx, opciones[i], textoX, textoY - (lineHeight * 0.5), maxWidth, lineHeight);
@@ -153,6 +158,8 @@
     function girar() {
       if (girando) return;
       girando = true;
+      document.getElementById("resultado").innerText = "";
+      document.getElementById("mensaje-trampa").innerText = "";
 
       const vueltas = Math.random() * 3 + 4; // entre 4 y 7 vueltas
       const anguloFinal = vueltas * 2 * Math.PI;
@@ -181,6 +188,7 @@
       const indice = Math.floor((opciones.length - ((anguloActual / (2 * Math.PI)) * opciones.length)) % opciones.length);
       const resultado = opciones[indice];
       document.getElementById("resultado").innerText = "Resultado: " + resultado;
+      document.getElementById("mensaje-trampa").innerText = "No hagas trampa amor toco y toco";
     }
 
     dibujarRuleta();
