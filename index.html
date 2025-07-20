@@ -5,12 +5,11 @@
   <title>Caja 2 💝</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
       background-color: #ffeef2;
       font-family: 'Dancing Script', cursive;
       text-align: center;
-      overflow: hidden;
+      margin: 0;
+      padding: 0;
     }
 
     h1 {
@@ -20,53 +19,19 @@
       font-style: italic;
     }
 
-    #wheel-container {
-      position: relative;
-      width: 400px;
-      height: 400px;
-      margin: 40px auto;
-    }
-
-    #wheel {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      border: 8px solid #d63384;
-      position: relative;
-      transition: transform 5s ease-out;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-
-    .segment {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      left: 50%;
-      top: 50%;
-      transform-origin: 0% 0%;
-      background-color: #f8cdd5;
-      color: #d63384;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 1em;
-      text-align: center;
-      padding: 5px;
-      font-style: italic;
+    canvas {
+      margin-top: 30px;
     }
 
     #arrow {
       width: 0;
       height: 0;
-      border-left: 25px solid transparent;
-      border-right: 25px solid transparent;
-      border-bottom: 35px solid #d63384;
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #d63384;
+      margin: 0 auto;
+      position: relative;
+      top: 10px;
     }
 
     button {
@@ -81,38 +46,102 @@
       font-style: italic;
       cursor: pointer;
     }
+
+    #resultado {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #b2005f;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
 
   <h1>Caja 2 💝</h1>
-
-  <div id="wheel-container">
-    <div id="arrow"></div>
-    <div id="wheel">
-      <!-- 6 segmentos (360/6 = 60 grados) -->
-      <div class="segment" style="transform: rotate(0deg)   translate(-100%) rotate(0deg);">foto carita</div>
-      <div class="segment" style="transform: rotate(60deg)  translate(-100%) rotate(-60deg);">audio tierno con voz tierna</div>
-      <div class="segment" style="transform: rotate(120deg) translate(-100%) rotate(-120deg);">audio cantándome una canción</div>
-      <div class="segment" style="transform: rotate(180deg) translate(-100%) rotate(-180deg);">foto que solo yo pueda ver 😉</div>
-      <div class="segment" style="transform: rotate(240deg) translate(-100%) rotate(-240deg);">¿qué es lo que más te gusta de mí?</div>
-      <div class="segment" style="transform: rotate(300deg) translate(-100%) rotate(-300deg);">foto carita</div>
-    </div>
-  </div>
-
-  <button onclick="girarRuleta()">Girar 💫</button>
+  <div id="arrow"></div>
+  <canvas id="ruleta" width="300" height="300"></canvas>
+  <br>
+  <button onclick="girar()">Girar 💫</button>
+  <div id="resultado"></div>
 
   <script>
-    const wheel = document.getElementById('wheel');
-    let currentRotation = 0;
+    const opciones = [
+      "foto carita",
+      "audio tierno con voz tierna",
+      "audio cantándome una canción",
+      "foto que solo yo pueda ver 😉",
+      "¿qué es lo que más te gusta de mí?",
+      "foto carita"
+    ];
 
-    function girarRuleta() {
-      // Gira entre 5 y 10 vueltas + un ángulo aleatorio
-      const extraGiro = Math.floor(Math.random() * 360);
-      const giros = 360 * (5 + Math.floor(Math.random() * 5));
-      currentRotation += giros + extraGiro;
-      wheel.style.transform = `rotate(${currentRotation}deg)`;
+    const colores = ["#f8cdd5", "#f4a6b7"];
+    const canvas = document.getElementById("ruleta");
+    const ctx = canvas.getContext("2d");
+    const tamaño = canvas.width;
+    const radio = tamaño / 2;
+    const anguloPorSector = (2 * Math.PI) / opciones.length;
+
+    let anguloActual = 0;
+    let girando = false;
+
+    function dibujarRuleta() {
+      for (let i = 0; i < opciones.length; i++) {
+        const anguloInicio = anguloPorSector * i + anguloActual;
+        const anguloFin = anguloInicio + anguloPorSector;
+
+        ctx.beginPath();
+        ctx.moveTo(radio, radio);
+        ctx.arc(radio, radio, radio, anguloInicio, anguloFin);
+        ctx.fillStyle = colores[i % colores.length];
+        ctx.fill();
+        ctx.stroke();
+
+        // Texto
+        ctx.save();
+        ctx.translate(radio, radio);
+        ctx.rotate(anguloInicio + anguloPorSector / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#b2005f";
+        ctx.font = "italic 14px 'Dancing Script', cursive";
+        ctx.fillText(opciones[i], radio - 10, 5);
+        ctx.restore();
+      }
     }
+
+    function girar() {
+      if (girando) return;
+      girando = true;
+
+      const vueltas = Math.random() * 3 + 4; // entre 4 y 7 vueltas
+      const anguloFinal = vueltas * 2 * Math.PI;
+      const duracion = 4000;
+      const inicio = performance.now();
+
+      function animar(tiempo) {
+        const progreso = (tiempo - inicio) / duracion;
+        if (progreso < 1) {
+          const ease = 1 - Math.pow(1 - progreso, 3); // easeOutCubic
+          anguloActual = anguloFinal * ease;
+          ctx.clearRect(0, 0, tamaño, tamaño);
+          dibujarRuleta();
+          requestAnimationFrame(animar);
+        } else {
+          anguloActual %= 2 * Math.PI;
+          mostrarResultado();
+          girando = false;
+        }
+      }
+
+      requestAnimationFrame(animar);
+    }
+
+    function mostrarResultado() {
+      const sector = Math.floor((opciones.length - (anguloActual / (2 * Math.PI)) * opciones.length) % opciones.length);
+      const resultado = opciones[sector];
+      document.getElementById("resultado").innerText = "Resultado: " + resultado;
+    }
+
+    dibujarRuleta();
   </script>
 
 </body>
