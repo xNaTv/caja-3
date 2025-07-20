@@ -20,18 +20,22 @@
     }
 
     canvas {
-      margin-top: 30px;
+      margin-top: 10px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     #arrow {
       width: 0;
       height: 0;
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;
-      border-bottom: 30px solid #d63384;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 25px solid #d63384;
       margin: 0 auto;
       position: relative;
       top: 10px;
+      z-index: 10;
     }
 
     button {
@@ -85,10 +89,13 @@
     let girando = false;
 
     function dibujarRuleta() {
+      ctx.clearRect(0, 0, tamaño, tamaño);
+
       for (let i = 0; i < opciones.length; i++) {
         const anguloInicio = anguloPorSector * i + anguloActual;
         const anguloFin = anguloInicio + anguloPorSector;
 
+        // Dibujar segmento
         ctx.beginPath();
         ctx.moveTo(radio, radio);
         ctx.arc(radio, radio, radio, anguloInicio, anguloFin);
@@ -96,14 +103,14 @@
         ctx.fill();
         ctx.stroke();
 
-        // Texto
+        // Dibujar texto
         ctx.save();
         ctx.translate(radio, radio);
         ctx.rotate(anguloInicio + anguloPorSector / 2);
         ctx.textAlign = "right";
         ctx.fillStyle = "#b2005f";
-        ctx.font = "italic 14px 'Dancing Script', cursive";
-        ctx.fillText(opciones[i], radio - 10, 5);
+        ctx.font = "italic 13px 'Dancing Script', cursive";
+        ctx.fillText(opciones[i], radio - 15, 0);
         ctx.restore();
       }
     }
@@ -122,11 +129,11 @@
         if (progreso < 1) {
           const ease = 1 - Math.pow(1 - progreso, 3); // easeOutCubic
           anguloActual = anguloFinal * ease;
-          ctx.clearRect(0, 0, tamaño, tamaño);
           dibujarRuleta();
           requestAnimationFrame(animar);
         } else {
           anguloActual %= 2 * Math.PI;
+          dibujarRuleta();
           mostrarResultado();
           girando = false;
         }
@@ -136,8 +143,9 @@
     }
 
     function mostrarResultado() {
-      const sector = Math.floor((opciones.length - (anguloActual / (2 * Math.PI)) * opciones.length) % opciones.length);
-      const resultado = opciones[sector];
+      // Corregido: la flecha ahora apunta hacia ARRIBA
+      const indice = Math.floor((opciones.length - ((anguloActual / (2 * Math.PI)) * opciones.length)) % opciones.length);
+      const resultado = opciones[indice];
       document.getElementById("resultado").innerText = "Resultado: " + resultado;
     }
 
