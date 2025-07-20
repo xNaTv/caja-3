@@ -17,11 +17,12 @@
       justify-content: center;
       align-items: flex-start;
       height: 100vh;
-      padding-top: 80px; /* Baja todo */
+      padding-top: 120px; /* 🔽 Bajamos más todo */
     }
 
     .wheel-container {
       text-align: center;
+      margin-right: 20px;
     }
 
     .wheel {
@@ -61,7 +62,7 @@
     }
 
     .btn-girar {
-      margin-top: 20px;
+      margin-top: 30px; /* 🔽 Bajamos el botón */
       padding: 10px 20px;
       font-size: 18px;
       background-color: #ff69b4;
@@ -73,7 +74,7 @@
     }
 
     .resultado {
-      margin-top: 20px;
+      margin-top: 25px; /* 🔽 Bajamos el resultado */
       font-size: 20px;
       font-style: italic;
       color: #d63384;
@@ -88,7 +89,7 @@
 
     .explicacion {
       width: 300px;
-      margin-left: 50px;
+      margin-left: 30px; /* 🔁 Más a la izquierda */
       font-size: 18px;
       font-style: italic;
       color: #d63384;
@@ -154,7 +155,7 @@
     btnGirar.addEventListener("click", () => {
       const randomIndex = Math.floor(Math.random() * opciones.length);
       const gradosPorOpcion = 360 / opciones.length;
-      const anguloBase = 360 * 5; // 5 vueltas completas
+      const anguloBase = 360 * 5;
       const anguloFinal = anguloBase + (360 - gradosPorOpcion * randomIndex - gradosPorOpcion / 2);
 
       ruleta.style.transition = "transform 4s ease-out";
