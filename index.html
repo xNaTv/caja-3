@@ -13,12 +13,7 @@
       color: #b2005f;
       overflow: hidden;
       height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start; /* para poder bajar con margin */
-      position: relative;
       text-align: center;
-      padding-top: 130px; /* espacio para título */
     }
 
     h1 {
@@ -34,13 +29,15 @@
     }
 
     #center-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 40px;
-      position: relative;
       z-index: 5;
-      margin-top: 40px; /* Baja todo el bloque central */
     }
 
     #ruleta-container {
@@ -105,7 +102,6 @@
       z-index: 2;
     }
 
-    /* Poema explicativo a la derecha, pegado al borde derecho pero un poco más a la izquierda */
     #poema {
       max-width: 350px;
       color: #9b2d58;
@@ -121,7 +117,6 @@
       z-index: 10;
     }
 
-    /* Corazones cayendo */
     .heart {
       position: fixed;
       width: 15px;
@@ -166,7 +161,6 @@
       }
     }
 
-    /* Responsive: en pantallas pequeñas el poema pasa abajo */
     @media (max-width: 800px) {
       #poema {
         position: static;
@@ -177,13 +171,14 @@
         user-select: auto;
       }
       #center-container {
+        position: static;
+        transform: none;
         flex-direction: column;
         gap: 15px;
         margin-top: 20px;
       }
     }
   </style>
-  <!-- Fuente cursiva -->
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
 </head>
 <body>
@@ -296,9 +291,7 @@
       document.getElementById("resultado").textContent = "";
 
       const vueltas = Math.random() * 3 + 4;
-      const indiceGanador = Math.floor(Math.random() * opciones.length);
-      const anguloParaOpcion = (3 * Math.PI / 2) - (indiceGanador * anguloPorSector) - (anguloPorSector / 2);
-      const anguloFinal = vueltas * 2 * Math.PI + anguloParaOpcion;
+      const anguloFinal = vueltas * 2 * Math.PI + Math.random() * 2 * Math.PI;
 
       const duracion = 4000;
       const inicio = performance.now();
@@ -313,6 +306,11 @@
         } else {
           anguloActual %= 2 * Math.PI;
           dibujarRuleta();
+
+          // Cálculo índice ganador con ajuste para flecha arriba (3PI/2)
+          let anguloRotado = (3 * Math.PI / 2 - anguloActual + 2 * Math.PI) % (2 * Math.PI);
+          const indiceGanador = Math.floor(anguloRotado / anguloPorSector) % opciones.length;
+
           mostrarResultado(indiceGanador);
           girando = false;
         }
@@ -344,3 +342,4 @@
 
 </body>
 </html>
+
