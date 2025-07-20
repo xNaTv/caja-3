@@ -4,28 +4,41 @@
   <meta charset="UTF-8" />
   <title>Caja 3 💝</title>
   <style>
+    /* Fondo y fuente */
     body {
-      background-color: #ffeef2;
-      font-family: 'Dancing Script', cursive;
-      text-align: center;
       margin: 0;
       padding: 0;
+      background: #ffeef2; /* Rosa pastel */
+      font-family: 'Dancing Script', cursive;
+      font-style: italic;
+      text-align: center;
+      overflow: hidden;
+      height: 100vh;
+      position: relative;
+      color: #b2005f;
     }
 
+    /* Título */
     h1 {
       font-size: 3em;
       margin-top: 20px;
       color: #d63384;
       font-style: italic;
+      position: relative;
+      z-index: 2;
     }
 
+    /* Canvas ruleta */
     canvas {
       margin-top: 10px;
       display: block;
       margin-left: auto;
       margin-right: auto;
+      position: relative;
+      z-index: 2;
     }
 
+    /* Flecha */
     #arrow {
       width: 0;
       height: 0;
@@ -35,9 +48,10 @@
       margin: 0 auto;
       position: relative;
       top: 10px;
-      z-index: 10;
+      z-index: 3;
     }
 
+    /* Botón girar */
     #boton-girar {
       margin-top: 20px;
       font-size: 1.4em;
@@ -49,13 +63,18 @@
       font-family: 'Dancing Script', cursive;
       font-style: italic;
       cursor: pointer;
+      position: relative;
+      z-index: 2;
     }
 
+    /* Resultado y mensaje */
     #resultado {
       margin-top: 20px;
       font-size: 1.5em;
       color: #b2005f;
       font-style: italic;
+      position: relative;
+      z-index: 2;
     }
 
     #mensaje-trampa {
@@ -64,8 +83,57 @@
       color: #a1004f;
       font-style: italic;
       font-weight: 500;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Corazones cayendo */
+    .heart {
+      position: fixed;
+      width: 15px;
+      height: 15px;
+      background: #ff4d6d;
+      transform: rotate(45deg);
+      animation: fall linear infinite;
+      z-index: 1;
+      top: -10%;
+      opacity: 1;
+      border-radius: 2px;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: #ff4d6d;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -7.5px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -7.5px;
+      top: 0;
+    }
+
+    @keyframes fall {
+      0% {
+        top: -10%;
+        opacity: 1;
+      }
+      100% {
+        top: 110%;
+        opacity: 0;
+      }
     }
   </style>
+  <!-- Fuente cursiva -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -199,6 +267,21 @@
     }
 
     dibujarRuleta();
+
+    // Crear corazones cayendo
+    function crearCorazones() {
+      for (let i = 0; i < 40; i++) {
+        let heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = 5 + Math.random() * 5 + "s";
+        heart.style.animationDelay = Math.random() * 5 + "s";
+        document.body.appendChild(heart);
+      }
+    }
+
+    crearCorazones();
+
   </script>
 
 </body>
