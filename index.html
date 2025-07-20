@@ -31,20 +31,6 @@
       height: 320px;
     }
 
-    .wheel {
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      border: 10px solid #ff69b4;
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      box-sizing: border-box;
-      overflow: visible;
-      background: white;
-    }
-
-    /* Flechita arriba */
     .wheel-pointer {
       position: absolute;
       top: -24px;
@@ -58,35 +44,45 @@
       z-index: 2;
     }
 
+    .wheel {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 10px solid #ff69b4;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      box-sizing: border-box;
+      overflow: hidden;
+      transform: rotate(0deg);
+    }
+
     .segment {
       position: absolute;
-      width: 150px;
-      height: 150px;
-      top: 0;
-      left: 0;
-      border-radius: 0 100% 0 0/0 100% 0 0;
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
+      width: 50%;
+      height: 50%;
+      left: 50%;
+      top: 50%;
+      transform-origin: 0% 0%;
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
     }
 
     .segment-text {
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      transform: rotate(90deg) translateY(-50%);
+      transform-origin: left center;
+      width: 120px;
       color: #222;
       font-weight: bold;
-      font-size: 15px;
-      position: absolute;
-      bottom: 10px;
-      left: 65px;
-      width: 95px;
-      text-align: center;
-      transform: rotate(-90deg);
-      pointer-events: none;
-      /* Fondo para que no se solape tanto */
-      background: rgba(255,255,255,0.7);
+      font-size: 13px;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 3px 6px;
       border-radius: 6px;
-      padding: 2px;
       font-family: inherit;
+      pointer-events: none;
     }
 
     .btn-girar {
@@ -168,7 +164,6 @@
     const resultado = document.getElementById("resultado");
     const mensaje = document.getElementById("mensaje");
 
-    // Limpiar ruleta antes de dibujar
     function crearSegmentos() {
       ruleta.innerHTML = "";
       const num = opciones.length;
@@ -178,11 +173,8 @@
         const seg = document.createElement("div");
         seg.className = "segment";
         seg.style.background = colores[i % colores.length];
+        seg.style.transform = `rotate(${i * gradosPorOpcion}deg) skewY(${90 - gradosPorOpcion}deg)`;
 
-        // Ubicar segmento
-        seg.style.transform = `rotate(${gradosPorOpcion * i}deg) skewY(${90 - gradosPorOpcion}deg)`;
-
-        // Texto dentro de cada segmento, bien posicionado
         const texto = document.createElement("div");
         texto.className = "segment-text";
         texto.innerText = opciones[i];
@@ -195,7 +187,7 @@
 
     crearSegmentos();
 
-    let giroActual = 0; // el ángulo de giro actual
+    let giroActual = 0;
 
     btnGirar.addEventListener("click", () => {
       resultado.innerText = "";
@@ -205,9 +197,7 @@
       const num = opciones.length;
       const gradosPorOpcion = 360 / num;
       const randomIndex = Math.floor(Math.random() * num);
-
-      // La ruleta gira varias veces y cae en el ganador
-      const vueltas = 5 + Math.random(); // 5+ vueltas aleatorias
+      const vueltas = 5 + Math.random(); 
       const anguloFinal = 360 * vueltas - (randomIndex * gradosPorOpcion) - gradosPorOpcion/2;
 
       giroActual = anguloFinal;
@@ -221,10 +211,6 @@
         mensaje.style.display = "none";
       }, 4000);
     });
-
-    // Al recargar/crear segmento reiniciar ángulo
-    ruleta.style.transform = "rotate(0deg)";
   </script>
 </body>
 </html>
-
