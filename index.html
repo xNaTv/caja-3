@@ -10,158 +10,163 @@
       font-family: 'Dancing Script', cursive;
       background-color: #ffeef2;
       overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
       height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding-top: 80px; /* Baja todo */
     }
 
-    .contenedor-principal {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 60px;
-    }
-
-    .ruleta-contenedor {
+    .wheel-container {
       text-align: center;
-      margin-right: 60px;
     }
 
-    canvas {
+    .wheel {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 10px solid #ff69b4;
+      position: relative;
       margin: 0 auto;
-      display: block;
     }
 
-    #boton {
+    .wheel:before {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 20px solid red;
+      z-index: 2;
+    }
+
+    .segment {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      left: 50%;
+      top: 50%;
+      transform-origin: 0% 0%;
+      text-align: right;
+      padding-right: 10px;
+      font-style: normal; /* NO en cursiva */
+      color: white;
+    }
+
+    .btn-girar {
       margin-top: 20px;
       padding: 10px 20px;
-      font-size: 1.2em;
+      font-size: 18px;
       background-color: #ff69b4;
-      color: white;
       border: none;
-      border-radius: 10px;
+      color: white;
+      border-radius: 5px;
       cursor: pointer;
-      font-family: 'Dancing Script', cursive;
-    }
-
-    #resultado, #advertencia {
-      margin-top: 15px;
-      font-size: 1.2em;
-      color: #c2185b;
       font-style: italic;
     }
 
-    #texto-explicativo {
-      font-size: 1.3em;
-      max-width: 300px;
+    .resultado {
+      margin-top: 20px;
+      font-size: 20px;
       font-style: italic;
-      color: #7b1fa2;
-      margin-left: -30px;
+      color: #d63384;
+    }
+
+    .mensaje {
+      margin-top: 10px;
+      font-size: 16px;
+      font-style: italic;
+      color: #999;
+    }
+
+    .explicacion {
+      width: 300px;
+      margin-left: 50px;
+      font-size: 18px;
+      font-style: italic;
+      color: #d63384;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      margin-top: 20px;
+      color: #d63384;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
-  <div class="contenedor-principal">
-    <div class="ruleta-contenedor">
-      <canvas id="ruleta" width="300" height="300"></canvas>
-      <button id="boton">Girar Ruleta</button>
-      <div id="resultado"></div>
-      <div id="advertencia"></div>
+  <h1>Caja 3</h1>
+  <div class="container">
+    <div class="wheel-container">
+      <div class="wheel" id="ruleta"></div>
+      <button class="btn-girar" id="btnGirar">Girar</button>
+      <div class="resultado" id="resultado"></div>
+      <div class="mensaje" id="mensaje" style="display:none;">no hagas trampa amor toco y toco</div>
     </div>
-    <div id="texto-explicativo">
+    <div class="explicacion">
       Para conseguir el código,<br>
-      debés girar la ruleta.<br>
-      Y enviarme lo que toque,<br>
-      con gracia, sin treta.<br><br>
-
-      Puede que sea tierno,<br>
-      divertido o atrevido,<br>
-      pero solo si lo hacés,<br>
-      te daré lo prometido.<br><br>
-
-      No busques trampa ni atajo,<br>
-      jugá con el corazón,<br>
-      que el código lo guardo yo,<br>
-      con todo mi amor y razón.
+      debes girar la ruleta con estilo,<br>
+      y lo que te toque, mi cielo,<br>
+      deberás hacer sin desvío.<br><br>
+      Envíame lo que salió,<br>
+      no inventes, ni lo acomodes,<br>
+      que el código lo tengo yo,<br>
+      y solo a ti te corresponde.
     </div>
   </div>
 
   <script>
-    const canvas = document.getElementById("ruleta");
-    const ctx = canvas.getContext("2d");
-    const boton = document.getElementById("boton");
+    const opciones = [
+      "Decime un piropo", "Contame un secreto", "Mandame un audio cantando",
+      "Mandame un meme", "Confesá algo que no me dijiste", "Decime por qué me querés"
+    ];
+
+    const ruleta = document.getElementById("ruleta");
+    const btnGirar = document.getElementById("btnGirar");
     const resultado = document.getElementById("resultado");
-    const advertencia = document.getElementById("advertencia");
+    const mensaje = document.getElementById("mensaje");
 
-    const opciones = ["Beso", "Abrazo", "Video lindo", "Confesión", "Cita", "Foto tuya"];
-    const colores = ["#f8bbd0", "#f48fb1", "#f06292", "#ec407a", "#e91e63", "#ad1457"];
-    const numOpciones = opciones.length;
-    const angulo = (2 * Math.PI) / numOpciones;
-    let anguloInicio = 0;
-    let giro = 0;
+    const colores = ["#ff4d6d", "#ff85a1"];
 
-    function dibujarRuleta() {
-      for (let i = 0; i < numOpciones; i++) {
-        ctx.beginPath();
-        ctx.fillStyle = colores[i];
-        ctx.moveTo(150, 150);
-        ctx.arc(150, 150, 150, anguloInicio + i * angulo, anguloInicio + (i + 1) * angulo);
-        ctx.fill();
-        ctx.save();
-        ctx.translate(150, 150);
-        ctx.rotate(anguloInicio + i * angulo + angulo / 2);
-        ctx.textAlign = "right";
-        ctx.fillStyle = "white";
-        ctx.font = "18px Arial";
-        ctx.fillText(opciones[i], 130, 10);
-        ctx.restore();
+    function crearSegmentos() {
+      const num = opciones.length;
+      for (let i = 0; i < num; i++) {
+        const seg = document.createElement("div");
+        seg.className = "segment";
+        seg.style.transform = `rotate(${(360 / num) * i}deg)`;
+        seg.style.backgroundColor = colores[i % colores.length];
+        seg.innerText = opciones[i];
+        ruleta.appendChild(seg);
       }
-
-      // Dibujar flecha
-      ctx.beginPath();
-      ctx.moveTo(150, 0);
-      ctx.lineTo(140, 20);
-      ctx.lineTo(160, 20);
-      ctx.fillStyle = "black";
-      ctx.fill();
     }
 
-    function girarRuleta() {
-      boton.style.display = "none";
-      advertencia.innerText = "no hagas trampa amor, toco y toco";
+    crearSegmentos();
 
-      const vueltas = Math.floor(Math.random() * 4 + 5);
-      const randomOpcion = Math.floor(Math.random() * numOpciones);
-      const destinoAngulo = (2 * Math.PI * vueltas) + (randomOpcion * angulo) + angulo / 2;
+    btnGirar.addEventListener("click", () => {
+      const randomIndex = Math.floor(Math.random() * opciones.length);
+      const gradosPorOpcion = 360 / opciones.length;
+      const anguloBase = 360 * 5; // 5 vueltas completas
+      const anguloFinal = anguloBase + (360 - gradosPorOpcion * randomIndex - gradosPorOpcion / 2);
 
-      let duracion = 3000;
-      let inicio = null;
+      ruleta.style.transition = "transform 4s ease-out";
+      ruleta.style.transform = `rotate(${anguloFinal}deg)`;
 
-      function animar(timestamp) {
-        if (!inicio) inicio = timestamp;
-        const progreso = timestamp - inicio;
-        const avance = Math.min(progreso / duracion, 1);
-        giro = destinoAngulo * easeOut(avance);
-        anguloInicio = giro % (2 * Math.PI);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        dibujarRuleta();
-        if (avance < 1) {
-          requestAnimationFrame(animar);
-        } else {
-          resultado.innerText = `Te tocó: ${opciones[randomOpcion]}`;
-        }
-      }
+      btnGirar.style.display = "none";
+      mensaje.style.display = "block";
 
-      requestAnimationFrame(animar);
-    }
-
-    function easeOut(t) {
-      return 1 - Math.pow(1 - t, 3);
-    }
-
-    dibujarRuleta();
-    boton.addEventListener("click", girarRuleta);
+      setTimeout(() => {
+        resultado.innerText = `Te tocó: ${opciones[randomIndex]}`;
+      }, 4000);
+    });
   </script>
 </body>
 </html>
