@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title><i>Caja 3</i></title>
+  <title>Caja 3</title>
   <style>
     body {
       margin: 0;
@@ -25,47 +25,68 @@
       position: relative;
     }
 
+    .wheel-outer {
+      position: relative;
+      width: 320px;
+      height: 320px;
+    }
+
     .wheel {
       width: 300px;
       height: 300px;
       border-radius: 50%;
       border: 10px solid #ff69b4;
-      position: relative;
-      margin: 0 auto;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      box-sizing: border-box;
       overflow: visible;
+      background: white;
     }
 
-    .wheel:before {
-      content: "";
+    /* Flechita arriba */
+    .wheel-pointer {
       position: absolute;
-      top: -20px;
+      top: -24px;
       left: 50%;
       transform: translateX(-50%);
       width: 0;
       height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-bottom: 20px solid red;
+      border-left: 17px solid transparent;
+      border-right: 17px solid transparent;
+      border-bottom: 24px solid red;
       z-index: 2;
     }
 
     .segment {
       position: absolute;
-      width: 50%;
-      height: 50%;
-      top: 50%;
-      left: 50%;
-      transform-origin: 0% 0%;
-      clip-path: polygon(0 0, 100% 0, 0 100%);
-      background-color: transparent;
+      width: 150px;
+      height: 150px;
+      top: 0;
+      left: 0;
+      border-radius: 0 100% 0 0/0 100% 0 0;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
       display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding-left: 10px;
-      color: black;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .segment-text {
+      color: #222;
       font-weight: bold;
-      font-size: 14px;
-      overflow: visible;
+      font-size: 15px;
+      position: absolute;
+      bottom: 10px;
+      left: 65px;
+      width: 95px;
+      text-align: center;
+      transform: rotate(-90deg);
+      pointer-events: none;
+      /* Fondo para que no se solape tanto */
+      background: rgba(255,255,255,0.7);
+      border-radius: 6px;
+      padding: 2px;
+      font-family: inherit;
     }
 
     .btn-girar {
@@ -115,7 +136,10 @@
   <h1>Caja 3</h1>
   <div class="container">
     <div class="wheel-container">
-      <div class="wheel" id="ruleta"></div>
+      <div class="wheel-outer">
+        <div class="wheel-pointer"></div>
+        <div class="wheel" id="ruleta"></div>
+      </div>
       <button class="btn-girar" id="btnGirar">Girar</button>
       <div class="resultado" id="resultado"></div>
       <div class="mensaje" id="mensaje" style="display:none;">no hagas trampa amor toco y toco</div>
@@ -137,34 +161,32 @@
       "Decime un piropo", "Contame un secreto", "Mandame un audio cantando",
       "Mandame un meme", "Confesá algo que no me dijiste", "Decime por qué me querés"
     ];
+    const colores = ["#ff4d6d", "#ff85a1", "#ffe6f1", "#fadadd", "#ffb3c6", "#ffb6b9"];
 
     const ruleta = document.getElementById("ruleta");
     const btnGirar = document.getElementById("btnGirar");
     const resultado = document.getElementById("resultado");
     const mensaje = document.getElementById("mensaje");
 
-    const colores = ["#ff4d6d", "#ff85a1"];
-
+    // Limpiar ruleta antes de dibujar
     function crearSegmentos() {
+      ruleta.innerHTML = "";
       const num = opciones.length;
       const gradosPorOpcion = 360 / num;
 
       for (let i = 0; i < num; i++) {
         const seg = document.createElement("div");
         seg.className = "segment";
-        seg.style.transform = `rotate(${gradosPorOpcion * i}deg)`;
-        seg.style.backgroundColor = colores[i % colores.length];
+        seg.style.background = colores[i % colores.length];
 
-        // Texto rotado para que quede legible
-        const texto = document.createElement("span");
+        // Ubicar segmento
+        seg.style.transform = `rotate(${gradosPorOpcion * i}deg) skewY(${90 - gradosPorOpcion}deg)`;
+
+        // Texto dentro de cada segmento, bien posicionado
+        const texto = document.createElement("div");
+        texto.className = "segment-text";
         texto.innerText = opciones[i];
-        texto.style.position = "absolute";
-        texto.style.top = "50%";
-        texto.style.left = "0";
-        texto.style.width = "100px";
-        texto.style.whiteSpace = "nowrap";
-        texto.style.transform = `rotate(${gradosPorOpcion / 2}deg) translate(60px) rotate(-${gradosPorOpcion / 2}deg)`;
-        texto.style.pointerEvents = "none";
+        texto.style.transform = `rotate(${gradosPorOpcion / 2}deg)`;
 
         seg.appendChild(texto);
         ruleta.appendChild(seg);
@@ -173,22 +195,35 @@
 
     crearSegmentos();
 
+    let giroActual = 0; // el ángulo de giro actual
+
     btnGirar.addEventListener("click", () => {
-      const randomIndex = Math.floor(Math.random() * opciones.length);
-      const gradosPorOpcion = 360 / opciones.length;
-      const anguloBase = 360 * 5; // 5 vueltas completas
-      const anguloFinal = anguloBase + (360 - gradosPorOpcion * randomIndex - gradosPorOpcion / 2);
-
-      ruleta.style.transition = "transform 4s ease-out";
-      ruleta.style.transform = `rotate(${anguloFinal}deg)`;
-
+      resultado.innerText = "";
       btnGirar.style.display = "none";
       mensaje.style.display = "block";
 
+      const num = opciones.length;
+      const gradosPorOpcion = 360 / num;
+      const randomIndex = Math.floor(Math.random() * num);
+
+      // La ruleta gira varias veces y cae en el ganador
+      const vueltas = 5 + Math.random(); // 5+ vueltas aleatorias
+      const anguloFinal = 360 * vueltas - (randomIndex * gradosPorOpcion) - gradosPorOpcion/2;
+
+      giroActual = anguloFinal;
+
+      ruleta.style.transition = "transform 4s cubic-bezier(.08,.93,.57,1)";
+      ruleta.style.transform = `rotate(${giroActual}deg)`;
+
       setTimeout(() => {
         resultado.innerText = `Te tocó: ${opciones[randomIndex]}`;
+        btnGirar.style.display = "block";
+        mensaje.style.display = "none";
       }, 4000);
     });
+
+    // Al recargar/crear segmento reiniciar ángulo
+    ruleta.style.transform = "rotate(0deg)";
   </script>
 </body>
 </html>
